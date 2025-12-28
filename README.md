@@ -1,5 +1,7 @@
 # Word Count Gold Edition
 
+[![Run Extension Tests](https://github.com/alessandrocuzzocrea/word-count-gold-edition/actions/workflows/test.yml/badge.svg)](https://github.com/alessandrocuzzocrea/word-count-gold-edition/actions/workflows/test.yml)
+
 This extension provides a word count for each section in a Markdown file, displayed via CodeLens above headers.
 
 ## Features
