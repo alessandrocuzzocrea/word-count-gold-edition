@@ -26,12 +26,28 @@ export function activate(context: vscode.ExtensionContext) {
         const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
         let contentText = text;
         const match = text.match(frontmatterRegex);
+        let goal = 0;
+
         if (match) {
+            const frontmatter = match[1];
             contentText = text.substring(match[0].length);
+
+            // Check for word-goal
+            const goalMatch = frontmatter.match(/^word-goal:\s*(\d+)/m);
+            if (goalMatch) {
+                goal = parseInt(goalMatch[1], 10);
+            }
         }
 
         const count = countWords(contentText);
-        statusBarItem.text = `$(pencil) ${count} words`;
+
+        if (goal > 0) {
+            const percent = Math.round((count / goal) * 100);
+            statusBarItem.text = `$(pencil) ${count}/${goal} (${percent}%) words`;
+        } else {
+            statusBarItem.text = `$(pencil) ${count} words`;
+        }
+
         statusBarItem.show();
     };
 
