@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     // 2. Status Bar for total word count
-    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     context.subscriptions.push(statusBarItem);
 
     // Function to update status bar
