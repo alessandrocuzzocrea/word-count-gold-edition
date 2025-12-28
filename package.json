@@ -1,7 +1,7 @@
 {
-  "name": "markdown-word-count",
+  "name": "word-count-gold-edition",
   "publisher": "alessacrea",
-  "displayName": "Markdown Section Word Count",
+  "displayName": "Word Count Gold Edition",
   "description": "Displays word count per section in Markdown files, ignoring Hugo frontmatter.",
   "version": "0.0.1",
   "engines": {
@@ -17,9 +17,9 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "Markdown Word Count",
+      "title": "Word Count Gold Edition",
       "properties": {
-        "markdownWordCount.enable": {
+        "wordCountGoldEdition.enable": {
           "type": "boolean",
           "default": true,
           "description": "Enable/disable word counts."

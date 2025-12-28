@@ -1,4 +1,4 @@
-# Markdown Word Count Extension
+# Word Count Gold Edition
 
 This extension provides a word count for each section in a Markdown file, displayed via CodeLens above headers.
 

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Markdown Word Count is now active!');
+    console.log('Word Count Gold Edition is now active!');
 
     // 1. CodeLens for section word counts
     const codeLensProvider = new WordCountCodeLensProvider();
