@@ -1,5 +1,6 @@
 {
   "name": "markdown-word-count",
+  "publisher": "alessacrea",
   "displayName": "Markdown Section Word Count",
   "description": "Displays word count per section in Markdown files, ignoring Hugo frontmatter.",
   "version": "0.0.1",
