@@ -3,16 +3,58 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
     console.log('Markdown Word Count is now active!');
 
+    // 1. CodeLens for section word counts
     const codeLensProvider = new WordCountCodeLensProvider();
-
     context.subscriptions.push(
         vscode.languages.registerCodeLensProvider({ language: 'markdown' }, codeLensProvider)
     );
+
+    // 2. Status Bar for total word count
+    const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
+    context.subscriptions.push(statusBarItem);
+
+    // Function to update status bar
+    const updateStatusBar = (doc: vscode.TextDocument | undefined) => {
+        if (!doc || doc.languageId !== 'markdown') {
+            statusBarItem.hide();
+            return;
+        }
+
+        const text = doc.getText();
+
+        // Exclude frontmatter
+        const frontmatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n/;
+        let contentText = text;
+        const match = text.match(frontmatterRegex);
+        if (match) {
+            contentText = text.substring(match[0].length);
+        }
+
+        const count = countWords(contentText);
+        statusBarItem.text = `$(pencil) ${count} words`;
+        statusBarItem.show();
+    };
+
+    // Events to update status bar
+    context.subscriptions.push(
+        vscode.window.onDidChangeActiveTextEditor(editor => {
+            updateStatusBar(editor?.document);
+        }),
+        vscode.workspace.onDidChangeTextDocument(e => {
+            if (vscode.window.activeTextEditor && e.document === vscode.window.activeTextEditor.document) {
+                updateStatusBar(e.document);
+            }
+        })
+    );
+
+    // Initial update
+    updateStatusBar(vscode.window.activeTextEditor?.document);
 
     vscode.workspace.onDidChangeTextDocument(e => {
         console.log('Document changed:', e.document.fileName);
     });
 }
+
 
 export function deactivate() { }
 
@@ -83,7 +125,7 @@ class WordCountCodeLensProvider implements vscode.CodeLensProvider {
             }
 
             const sectionContent = text.substring(startOffset, endOffset);
-            const count = this.countWords(sectionContent);
+            const count = countWords(sectionContent);
 
             lenses.push(this.createLens(currentHeaderLine.range, count));
         }
@@ -99,15 +141,16 @@ class WordCountCodeLensProvider implements vscode.CodeLensProvider {
         };
         return new vscode.CodeLens(range, command);
     }
-
-    private countWords(text: string): number {
-        // Strip markdown syntax roughly if needed, or just count whitespace separated chunks.
-        // For a writing aid, simple whitespace split is usually sufficient.
-        // We trim to avoid counting leading/trailing empty strings.
-        const clean = text.trim();
-        if (clean.length === 0) {
-            return 0;
-        }
-        return clean.split(/\s+/).length;
-    }
 }
+
+function countWords(text: string): number {
+    // Strip markdown syntax roughly if needed, or just count whitespace separated chunks.
+    // For a writing aid, simple whitespace split is usually sufficient.
+    // We trim to avoid counting leading/trailing empty strings.
+    const clean = text.trim();
+    if (clean.length === 0) {
+        return 0;
+    }
+    return clean.split(/\s+/).length;
+}
+
