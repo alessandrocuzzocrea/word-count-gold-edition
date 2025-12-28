@@ -159,7 +159,7 @@ class WordCountCodeLensProvider implements vscode.CodeLensProvider {
     }
 }
 
-function countWords(text: string): number {
+export function countWords(text: string): number {
     // Strip markdown syntax roughly if needed, or just count whitespace separated chunks.
     // For a writing aid, simple whitespace split is usually sufficient.
     // We trim to avoid counting leading/trailing empty strings.
